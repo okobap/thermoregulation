@@ -17,6 +17,7 @@ class Terminal:
 
     def send_message(self):
         message = input(self.prompt).encode(self.encoding)
+       #message = input().encode(self.encoding)
         self.arduino.write(message)
 
         if message == b'exit!':
@@ -28,18 +29,20 @@ class Terminal:
     def receive_reply(self):
         while self.connected and self.is_reader_alive:
             reply = self.arduino.readline().decode(self.encoding)
-            time.sleep(0.2)
             try:
                 is_valid = ord(reply) != 32 and ord(reply) != 13
             except TypeError:
                 is_valid = True
             if reply and is_valid:
-                print(f"\nReply --> {reply}\n{self.prompt}", end='')
+                #print(f"\nReply --> {reply}\n{self.prompt}", end='')
+                print(reply)
                 output_file = open(write_to_file_path, "a")
                 output_file.write("\n" + str(time.time()) + "\n")
                 output_file.write(reply)
                 output_file.close()
+            time.sleep(1)
 
+            
     def start_terminal(self):
         try:
             self.connected = True
