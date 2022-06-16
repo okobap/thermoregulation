@@ -60,10 +60,18 @@ print("corrupted data number : ", ierror)
 TempDataFile.close()
 
 
-plt.plot(time, theta1)
-plt.plot(time, theta2)
-plt.plot(time, theta3)
-plt.plot(time, theta4)
+fig, ax = plt.subplots()
+
+
+ax.plot(time, theta1, color='blue', label='T1')
+ax.plot(time, theta2, color='black', label='T2')
+ax.plot(time, theta3, color='red', label='T3')
+ax.plot(time, theta4, color='orange', label='T4')
+ax.set_title('Temperatures measurements  - ' + write_to_file_path )
+leg = ax.legend()
+ax.set_xlabel('time (s)')
+ax.set_ylabel(' T (°C)')
+
 plt.show()
 
 

@@ -58,12 +58,13 @@ class Terminal:
 
 
 if __name__ == "__main__":
-    write_to_file_path = "data/" + input("Nom du fichier .txt de données de températures : ") + ".txt"
-    serial_port = input("enter name of the port : ")
+    write_to_file_path = "data/" + input("Please enter the name of the experiment : ") + ".txt"
+    serial_port = input("Please enter the name of the port : ")
     #output_file = open(write_to_file_path, "w+")
     ardterm = Terminal(serial_port)
     ardterm.start_terminal()
     
-    
-    
+   
+
+
 
