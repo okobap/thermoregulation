@@ -17,30 +17,58 @@ write_to_file_path = "data/" + input("Please enter the name of the experiment : 
 TempDataFile = open(write_to_file_path, "r")
 TempDataFile.readline() #to read the first empty line of the .txt file 
 
-#for i in range(10) : 
-i = 0
-#for line in TempDataFile : 
+
+ierror = 0
+
 
 timeLine = TempDataFile.readline()
 t0, d = divmod(float(timeLine), 1) #getting time origin
 
 tempLine = TempDataFile.readline()
-while timeLine : 
-    print(i)
 
-    # getting time data
-    t1, d = divmod(float(timeLine), 1)
-    time.append(t1-t0)
-    print(t1-t0)
+while timeLine and tempLine : 
 
     #getting temperature data
-    print(tempLine)
-    i += 1
+
+    tempLine = tempLine.replace(" ", "")
+    tempLine = tempLine.replace("\n", "")
+    Temps = tempLine.split(",")
+    for element in Temps : 
+        if len(element) != 5 :
+            Temps.remove(element)
+
+    if len(Temps) == 4 : 
+        theta1.append(float(Temps[0]))
+        theta2.append(float(Temps[1]))
+        theta3.append(float(Temps[2]))
+        theta4.append(float(Temps[3]))
+
+         # getting time data
+        t1, d = divmod(float(timeLine), 1)
+        time.append(t1-t0)
+    
+
+    else : 
+        ierror += 1
+ 
+    # moving on to the next lines 
     timeLine = TempDataFile.readline()
     tempLine = TempDataFile.readline()
-    #print(TempDataFile.readline())
+
+print("corrupted data number : ", ierror)
 
 TempDataFile.close()
+
+
+plt.plot(time, theta1)
+plt.plot(time, theta2)
+plt.plot(time, theta3)
+plt.plot(time, theta4)
+plt.show()
+
+
+
+
 
 
 
