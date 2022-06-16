@@ -2,6 +2,11 @@ import serial
 import time
 import threading
 
+import matplotlib.pyplot as plt
+import numpy as np
+import array as arr
+import math
+
 
 class Terminal:
     def __init__(self, com_port, baud_rate=9600, timeout=0.0) -> None:
@@ -58,13 +63,92 @@ class Terminal:
 
 
 if __name__ == "__main__":
-    write_to_file_path = "data/" + input("Please enter the name of the experiment : ") + ".txt"
+    nameExp = input("Please enter the name of the experiment : ")
+    write_to_file_path = "data/" + nameExp + ".txt"
     serial_port = input("Please enter the name of the port : ")
     #output_file = open(write_to_file_path, "w+")
     ardterm = Terminal(serial_port)
     ardterm.start_terminal()
     
    
+
+
+
+# initalising the needed arrays to plot our temperature measurments 
+time = arr.array('d', [])
+theta1 = arr.array('d', [])
+theta2 = arr.array('d', [])
+theta3 = arr.array('d', [])
+theta4 = arr.array('d', [])
+
+
+
+#write_to_file_path = "data/" + input("Please enter the name of the experiment : ") + ".txt"
+
+TempDataFile = open(write_to_file_path, "r")
+TempDataFile.readline() #to read the first empty line of the .txt file 
+
+
+ierror = 0
+
+
+timeLine = TempDataFile.readline()
+t0, d = divmod(float(timeLine), 1) #getting time origin
+
+tempLine = TempDataFile.readline()
+
+while timeLine and tempLine : 
+
+    #getting temperature data
+
+    tempLine = tempLine.replace(" ", "")
+    tempLine = tempLine.replace("\n", "")
+    Temps = tempLine.split(",")
+    for element in Temps : 
+        if len(element) != 5 :
+            Temps.remove(element)
+
+    if len(Temps) == 4 : 
+        theta1.append(float(Temps[0]))
+        theta2.append(float(Temps[1]))
+        theta3.append(float(Temps[2]))
+        theta4.append(float(Temps[3]))
+
+         # getting time data
+        t1, d = divmod(float(timeLine), 1)
+        time.append(t1-t0)
+    
+
+    else : 
+        ierror += 1
+ 
+    # moving on to the next lines 
+    timeLine = TempDataFile.readline()
+    tempLine = TempDataFile.readline()
+
+print("corrupted data number : ", ierror)
+
+TempDataFile.close()
+
+
+fig, ax = plt.subplots()
+
+
+ax.plot(time, theta1, color='blue', label='T1')
+ax.plot(time, theta2, color='black', label='T2')
+ax.plot(time, theta3, color='red', label='T3')
+ax.plot(time, theta4, color='orange', label='T4')
+ax.set_title('Temperatures measurements  - ' + nameExp )
+leg = ax.legend()
+ax.set_xlabel('time (s)')
+ax.set_ylabel(' T (°C)')
+plt.savefig("data/" + nameExp + ".png")
+
+plt.show()
+
+
+
+
 
 
 
