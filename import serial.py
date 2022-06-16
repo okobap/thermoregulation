@@ -35,14 +35,14 @@ class Terminal:
                 is_valid = True
             if reply and is_valid:
                 #print(f"\nReply --> {reply}\n{self.prompt}", end='')
-                print(reply)
+                print("\n" + reply)
                 output_file = open(write_to_file_path, "a")
                 output_file.write("\n" + str(time.time()) + "\n")
                 output_file.write(reply)
                 output_file.close()
-            time.sleep(1)
+            time.sleep(2)
 
-            
+
     def start_terminal(self):
         try:
             self.connected = True
