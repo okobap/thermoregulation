@@ -3,6 +3,15 @@ import numpy as np
 import array as arr
 import math
 
+'''
+This is to be used in order to plot temperature measurements made with the Arduino shield EVAL-CN0391-ARDZ
+
+The following script should be dowloaded to the Arduino chip in advance C:\Users\BaptisteVauleon\src\projet-thermoregulation\arduino_thermocouple
+
+
+'''
+
+
 # initalising the needed arrays to plot our temperature measurments 
 time = arr.array('d', [])
 theta1 = arr.array('d', [])
@@ -80,34 +89,6 @@ plt.show()
 
 
 
-                #output_file.write(reply)
-               # output_file.close()
-  #line = ser.readline()
-   # line = line.decode("utf-8") #ser.readline returns a binary, convert to string
-   # print(line)
-   # output_file.write("\n" + str(time.time()) + "\n")
-   # output_file.write(line)
+  
 
-
-
-
-
-
-
-
-
-
-
-#b = arr.array('d', [2.5, 3.2, 3.3])
-#b.append(4.4)
-
-#xpoints = np.array([1, 8])
-
-#zpoints = np.array([3, 20])
-
-#ypoints = np.array([3, 10])
-
-#plt.plot(zpoints, ypoints)
-#plt.show()
-#plt.plot(xpoints, ypoints)
 
