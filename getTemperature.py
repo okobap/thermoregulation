@@ -11,21 +11,20 @@ import os.path
 from os import path
 
 
-'''
-
-This is to be used in order to launch an Temperature monitoring experiment. The total duration and period between temperature measurements are to be set via the terminal while the code is running. 
-You will also have to enter the 'name' of the port your are using to communicate with the Arduino chip on which the thermocouples are installed. This name should typically look like 'COM3'.
-
-After having collected all the data you will be invited to press enter, then the data will be ploted and the according figure saved with the .text data file
-
-At any time you should be able to shut down the communication with the Arduino chip by entering 'exit!' in the terminal when 'Arduino>>' is showing. 
-
-Be aware that when you shut down the communication with the Arduino chip, the code on the chip is still running. To completely shut down the chip and until a better solution you will have to unplug the alimentation of the chip
-
-The following script should be dowloaded to the Arduino chip in advance C:\Users\BaptisteVauleon\src\projet-thermoregulation\arduino_thermocouple
 
 
-'''
+#This is to be used in order to launch an Temperature monitoring experiment. The total duration and period between temperature measurements are to be set via the terminal while the code is running. 
+#You will also have to enter the 'name' of the port your are using to communicate with the Arduino chip on which the thermocouples are installed. This name should typically look like 'COM3'.
+
+#After having collected all the data you will be invited to press enter, then the data will be ploted and the according figure saved with the .text data file
+
+#At any time you should be able to shut down the communication with the Arduino chip by entering 'exit!' in the terminal when 'Arduino>>' is showing. 
+
+#Be aware that when you shut down the communication with the Arduino chip, the code on the chip is still running. To completely shut down the chip and until a better solution you will have to unplug the alimentation of the chip
+
+#The following script should be dowloaded to the Arduino chip in advance C:\Users\BaptisteVauleon\src\projet-thermoregulation\arduino_thermocouple
+
+
 
 
 
@@ -155,7 +154,7 @@ if __name__ == "__main__":
         tempLine = tempLine.replace("\n", "")
         Temps = tempLine.split(",")
         for element in Temps : 
-            if len(element) != 5 :
+            if len(element) != 5 and len(element) != 4 :
                 Temps.remove(element) # checks for corrupted data. Typically should look like an absent or partial temperature measurement that should normally look like '24.03'
 
         if len(Temps) == 4 : # if one temperature measurement is corrupted then the all set is deleted

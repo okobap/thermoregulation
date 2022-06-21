@@ -3,13 +3,12 @@ import numpy as np
 import array as arr
 import math
 
-'''
-This is to be used in order to plot temperature measurements made with the Arduino shield EVAL-CN0391-ARDZ
 
-The following script should be dowloaded to the Arduino chip in advance C:\Users\BaptisteVauleon\src\projet-thermoregulation\arduino_thermocouple
+#This is to be used in order to plot temperature measurements made with the Arduino shield EVAL-CN0391-ARDZ
+
+#The following script should be dowloaded to the Arduino chip in advance C:\Users\BaptisteVauleon\src\projet-thermoregulation\arduino_thermocouple
 
 
-'''
 
 
 # initalising the needed arrays to plot our temperature measurments 
@@ -21,7 +20,10 @@ theta4 = arr.array('d', [])
 
 
 
-write_to_file_path = "data/" + input("Please enter the name of the experiment : ") + ".txt"
+#write_to_file_path = "data/" + input("Please enter the name of the experiment : ") + ".txt"
+
+write_to_file_path = "data/2006_1607_MaxCooling01.txt"
+
 
 TempDataFile = open(write_to_file_path, "r")
 TempDataFile.readline() #to read the first empty line of the .txt file 
@@ -43,7 +45,7 @@ while timeLine and tempLine :
     tempLine = tempLine.replace("\n", "")
     Temps = tempLine.split(",")
     for element in Temps : 
-        if len(element) != 5 :
+        if len(element) != 5 and len(element) != 4:
             Temps.remove(element)
 
     if len(Temps) == 4 : 
@@ -67,7 +69,6 @@ while timeLine and tempLine :
 print("corrupted data number : ", ierror)
 
 TempDataFile.close()
-
 
 fig, ax = plt.subplots()
 
