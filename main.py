@@ -1,20 +1,24 @@
-import pyfirmata
-from pyfirmata import Arduino
+import serial
 import time
+import threading
+
+import matplotlib.pyplot as plt
+import numpy as np
+import array as arr
+import math
+import os
+import os.path
 
 
-print('Test')
+from terminal import Terminal
 
+from dataFinalPlot import *
 
+if __name__ == "__main__": 
+    nameExp = input("Please enter the name of the experiment : ")
+    write_to_file_path = "data/" + nameExp + ".txt" 
+    serial_port = input("Please enter the name of the port : ") # in order to properly communicate with the Arduino chip you will have to manually enter the name of the port you are using to communicate with the chip. 
+    ardterm = Terminal(serial_port, write_to_file_path)
+    ardterm.start_terminal() # until the end signal coming from he Arduino chip indicating that the total amount time has elapsed, continues looking at the serial port to see if datat was sent, if so stores it
 
-if __name__ == '__main__':
-    board = Arduino('COM4') # establishing contact with the Arduino board via the choosen port 
-    print("Communication Successfully started")
-    
-    for i in range(5):
-        board.digital[13].write(1)
-        time.sleep(10)
-        print("LED set on")
-        board.digital[13].write(0)
-        time.sleep(1)
-        
+    plotingAndSaving(nameExp, write_to_file_path)

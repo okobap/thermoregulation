@@ -12,7 +12,6 @@ from os import path
 
 
 
-
 #This is to be used in order to launch an Temperature monitoring experiment. The total duration and period between temperature measurements are to be set via the terminal while the code is running. 
 #You will also have to enter the 'name' of the port your are using to communicate with the Arduino chip on which the thermocouples are installed. This name should typically look like 'COM3'.
 
@@ -169,6 +168,7 @@ if __name__ == "__main__":
         
 
         else : 
+
             ierror += 1
     
         # moving on to the next lines 
