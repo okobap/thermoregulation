@@ -31,9 +31,11 @@ from dataLivePlot import *
 #The following script should be dowloaded to the Arduino chip in advance C:\Users\BaptisteVauleon\src\projet-thermoregulation\arduino_thermocouple
 
 
-def listen_to_Arduino(ardterm, listen_running):
+def listen_to_Arduino(ardterm):
      ardterm.start_terminal() # until the end signal coming from he Arduino chip indicating that the total amount time has elapsed, continues looking at the serial port to see if datat was sent, if so stores it
-     listen_running = false
+
+     #plotingAndSaving(nameExp, write_to_file_path)
+     
 
 if __name__ == "__main__": 
     nameExp = input("Please enter the name of the experiment : ")
@@ -41,18 +43,20 @@ if __name__ == "__main__":
     serial_port = input("Please enter the name of the port : ") # in order to properly communicate with the Arduino chip you will have to manually enter the name of the port you are using to communicate with the chip. 
     ardterm = Terminal(serial_port, write_to_file_path)
 
-    listen_running = True
+
     number_of_lines_in_Tempfile = 0
 
 
-    listen = threading.Thread(target=listen_to_Arduino, args=(ardterm,listen_running,))
+    listen = threading.Thread(target=listen_to_Arduino, args=(ardterm,))
    
     listen.start()
 
-    livePloting(nameExp, write_to_file_path, listen_running, number_of_lines_in_Tempfile)
+    livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile)
 
     listen.join()
-    listen_running = False
+
+    plotingAndSaving(nameExp, write_to_file_path)
+
 
     
-    plotingAndSaving(nameExp, write_to_file_path)
+    

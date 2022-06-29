@@ -7,26 +7,21 @@ def update_line(line1, new_x, new_y):
     line1.set_xdata(np.append(line1.get_xdata(),[new_x]))
     line1.set_ydata(np.append(line1.get_ydata(),[new_y]))
     
-    # Rescale axes limits
-    ax.relim()
-    ax.autoscale()
+   
 
-    figure.canvas.draw()
-    figure.canvas.flush_events()
+
+
+def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
+
+    exit_signal = ''
+
+    time.sleep(20)
     
-
-
-def livePloting(nameExp, write_to_file_path, listen_running, number_of_lines_in_Tempfile):
-
-
-
-    time.sleep(10)
-    
-    timeline = []
-    theta1 = []
-    theta2 = []
-    theta3 = []
-    theta4 = []
+    timeline = [0]
+    theta1 = [25]
+    theta2 = [25]
+    theta3 = [25]
+    theta4 = [25]
 
     plt.ion()
 
@@ -46,20 +41,24 @@ def livePloting(nameExp, write_to_file_path, listen_running, number_of_lines_in_
     plt.ylabel("T (°C)")
 
 
-    while listen_running : 
+    while exit_signal != "The End." : 
 
         TempDataFile = open(write_to_file_path, "r") # opens the .txt file where data was stored
 
-        actual_number_of_lines = len(TempDataFile.readlines())
+        actual_TempDataFile = TempDataFile.readlines()
+     #   print(actual_TempDataFile)
+        actual_number_of_lines = len(actual_TempDataFile)
 
-        if (actual_number_of_lines != number_of_lines_in_Tempfile) and (actual_number_of_lines % 2 == 1) :
+        #if (actual_number_of_lines != number_of_lines_in_Tempfile) and (actual_number_of_lines % 2 == 1) :
+        if (actual_number_of_lines != number_of_lines_in_Tempfile) :
 
-            TempDataFile.readline() #to read the first empty line of the .txt file 
-            timeLine = TempDataFile.readline()
+         #   TempDataFile.readline() #to read the first empty line of the .txt file 
+            timeLine = actual_TempDataFile[1]
+
             t0, d = divmod(float(timeLine), 1) #getting time origin
 
-            timeLine = TempDataFile.readline()[-2]
-            tempLine = TempDataFile.readline()[-1]
+            timeLine = actual_TempDataFile[-2]
+            tempLine = actual_TempDataFile[-1]
 
             t1, d = divmod(float(timeLine), 1)
 
@@ -73,11 +72,20 @@ def livePloting(nameExp, write_to_file_path, listen_running, number_of_lines_in_
                     Temps.remove(element) # checks for corrupted data. Typically should look like an absent or partial temperature measurement that should normally look like '24.03'
 
             if len(Temps) == 4 : # if one temperature measurement is corrupted then the all set is deleted
-                update_line(line1, durée, Temp[0])
-                update_line(line2, durée, Temp[1])
-                update_line(line3, durée, Temp[2])
-                update_line(line4, durée, Temp[3])
+                update_line(line1, durée, float(Temps[0]))
+                update_line(line2, durée, float(Temps[1]))
+                update_line(line3, durée, float(Temps[2]))
+                update_line(line4, durée, float(Temps[3]))
+
+
+                 # Rescale axes limits
+                ax.relim()
+                ax.autoscale()
+
+                figure.canvas.draw()
+                figure.canvas.flush_events()
         
+        exit_signal = actual_TempDataFile[-1]
         time.sleep(1)
 
 
