@@ -22,8 +22,7 @@ class Terminal:
 
     def send_message(self):
 
-
-        if os.path.isfile(self.write_to_file_path): # checks if the .txt file where you want to collect data is already created or not. If not you will have to enter the experiments parameters. 
+        if len(open(self.write_to_file_path, "r").readlines()) != 0 : # checks if the .txt file where you want to collect data is already created or not. If not you will have to enter the experiments parameters. 
             message = input(self.prompt).encode(self.encoding)
 
             if message == b'exit!': # enable you to shut down the communication with the chip at any time 
@@ -50,13 +49,14 @@ class Terminal:
                 self.reader.join()
             
             self.arduino.write(message)
-         
-            time.sleep(10) #delay needed to let the time to create the file after the first call of send_message, progress to be made 
+            
+            time.sleep(5)
             
             
     def receive_reply(self):
         while self.connected and self.is_reader_alive:
             reply = self.arduino.readline().decode(self.encoding)
+            #print(reply)
             
             try:
                 is_valid = ord(reply) != 32 and ord(reply) != 13
@@ -65,18 +65,20 @@ class Terminal:
 
             
             if reply and is_valid:
+              #  print('I am valid')
                 output_file = open(self.write_to_file_path, "a")  # opens the .txt file where you want to store your data
                 output_file.write("\n" + str(time.time()) + "\n") # adds the absolute time in seconds when the data was taken
                 output_file.write(reply) # adds the according data
                 output_file.close()
+ 
 
-
-            if reply == "The End." : # receives the end signal from the Arduino chip. It means that the total amount of time has elapsed 
+            if reply[-8:] == "The End." : # receives the end signal from the Arduino chip. It means that the total amount of time has elapsed 
+               # print('I also am the End!')
                 self.connected = False
                 self.is_reader_alive = False
                 print("Measurements are done. Press Enter to get your graph.") # until a better solution you will have to manually press enter to see your data plotted 
 
-            time.sleep(2)
+            time.sleep(0.2)
             
 
 

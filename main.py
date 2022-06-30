@@ -34,26 +34,30 @@ from dataLivePlot import *
 def listen_to_Arduino(ardterm):
      ardterm.start_terminal() # until the end signal coming from he Arduino chip indicating that the total amount time has elapsed, continues looking at the serial port to see if datat was sent, if so stores it
 
+     #plotingAndSaving(nameExp, write_to_file_path)
+     
 
 if __name__ == "__main__": 
     nameExp = input("Please enter the name of the experiment : ")
     write_to_file_path = "data/" + nameExp + ".txt" 
+    output_file = open(write_to_file_path, "a")
     serial_port = input("Please enter the name of the port : ") # in order to properly communicate with the Arduino chip you will have to manually enter the name of the port you are using to communicate with the chip. 
     ardterm = Terminal(serial_port, write_to_file_path)
 
-    listen_running = True
     number_of_lines_in_Tempfile = 0
 
 
     listen = threading.Thread(target=listen_to_Arduino, args=(ardterm,))
-    livePlot = threading.Thread(target=livePloting, args=(nameExp, write_to_file_path,listen_running, number_of_lines_in_Tempfile,))
-
+   
     listen.start()
-    livePlot.start()
+
+    livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile)
 
     listen.join()
-    listen_running = False
 
-    livePlot.join()
-    
+
     plotingAndSaving(nameExp, write_to_file_path)
+
+
+    
+    

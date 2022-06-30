@@ -1,7 +1,7 @@
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-
+import os 
 
 def update_line(line1, new_x, new_y):
     line1.set_xdata(np.append(line1.get_xdata(),[new_x]))
@@ -15,13 +15,17 @@ def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
 
     exit_signal = ''
 
-    time.sleep(20)
+    #time.sleep(10)
+    while  len(open(write_to_file_path, "r").readlines()) == 0 :
+        time.sleep(2)
+        #print('waiting for the .txt file to be created')
+        
     
-    timeline = [0]
-    theta1 = [25]
-    theta2 = [25]
-    theta3 = [25]
-    theta4 = [25]
+    timeline = []
+    theta1 = []
+    theta2 = []
+    theta3 = []
+    theta4 = []
 
     plt.ion()
 
@@ -41,12 +45,12 @@ def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
     plt.ylabel("T (°C)")
 
 
-    while exit_signal != "The End." : 
+    while exit_signal != 'The End.' : 
 
         TempDataFile = open(write_to_file_path, "r") # opens the .txt file where data was stored
 
         actual_TempDataFile = TempDataFile.readlines()
-     #   print(actual_TempDataFile)
+      #  print(actual_TempDataFile)
         actual_number_of_lines = len(actual_TempDataFile)
 
         #if (actual_number_of_lines != number_of_lines_in_Tempfile) and (actual_number_of_lines % 2 == 1) :
@@ -85,9 +89,10 @@ def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
                 figure.canvas.draw()
                 figure.canvas.flush_events()
         
-        exit_signal = actual_TempDataFile[-1]
-        time.sleep(1)
+        exit_signal = actual_TempDataFile[-1][-8:]
+        time.sleep(0.2)
 
 
         
+    
         TempDataFile.close()
