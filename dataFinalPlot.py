@@ -29,14 +29,21 @@ def plotingAndSaving(nameExp, write_to_file_path) :
 
         #getting temperature data
 
+        while tempLine.count(".") <= 3 and tempLine[-8:] != "The End.": 
+            nextLineThatShouldBeATime = TempDataFile.readline()
+            endOfPreviousTempLine = TempDataFile.readline()
+            tempLine = tempLine + endOfPreviousTempLine
+           
+       
         tempLine = tempLine.replace(" ", "")
         tempLine = tempLine.replace("\n", "")
+
         Temps = tempLine.split(",")
         for element in Temps : 
             if len(element) != 5 and len(element) != 4 :
                 Temps.remove(element) # checks for corrupted data. Typically should look like an absent or partial temperature measurement that should normally look like '24.03'
 
-        if len(Temps) == 4 : # if one temperature measurement is corrupted then the all set is deleted
+        if len(Temps) == 4 and timeLine != '': # if one temperature measurement is corrupted then the all set is deleted
             theta1.append(float(Temps[0]))
             theta2.append(float(Temps[1]))
             theta3.append(float(Temps[2]))
@@ -77,3 +84,6 @@ def plotingAndSaving(nameExp, write_to_file_path) :
     plt.show()
 
     print("\nSee you around !")
+
+
+#plotingAndSaving('0607_1035_NewCube3', "data/0607_1035_NewCube3.txt")

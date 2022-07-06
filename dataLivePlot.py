@@ -11,7 +11,7 @@ def update_line(line1, new_x, new_y):
 
 
 
-def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
+def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile, ardterm):
 
     exit_signal = ''
 
@@ -45,7 +45,7 @@ def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
     plt.ylabel("T (°C)")
 
 
-    while exit_signal != 'The End.' : 
+    while exit_signal != 'The End.' and ardterm.connected : 
 
         TempDataFile = open(write_to_file_path, "r") # opens the .txt file where data was stored
 
@@ -90,9 +90,11 @@ def livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile):
                 figure.canvas.flush_events()
         
         exit_signal = actual_TempDataFile[-1][-8:]
+        
         time.sleep(0.2)
 
 
         
     
         TempDataFile.close()
+

@@ -20,12 +20,15 @@ class Terminal:
 
 
 
+            
+
     def send_message(self):
+
 
         if len(open(self.write_to_file_path, "r").readlines()) != 0 : # checks if the .txt file where you want to collect data is already created or not. If not you will have to enter the experiments parameters. 
             message = input(self.prompt).encode(self.encoding)
 
-            if message == b'exit!': # enable you to shut down the communication with the chip at any time 
+            if message == b'exit!' : # enable you to shut down the communication with the chip at any time 
                 self.connected = False
                 self.is_reader_alive = False
                 self.reader.join()
@@ -36,8 +39,17 @@ class Terminal:
             print("\n Let's get started ! \n")
            
             message1 = input(self.prompt + "What is your time unit (in seconds) ? ")
+            message = message1 +","
             message2 = input(self.prompt + "How long should the measurements last (in time unit) ? ")
-            message = message1 +","+ message2
+            message3 = input(self.prompt + "How many Relay switch do you want ? ")
+            message = message1 +","+ message2+","+ message3 +","
+            for i in range(int(message3)) : 
+                message4 = input(self.prompt + " Quand faire le switch numéro (time unit) : " + str(i) + " ?")
+                message = message + message4 + ";"
+            message = message[:-1]
+            
+
+            
             message = message.encode(self.encoding)
             
             print("\nProcessing...\n")  
@@ -55,6 +67,7 @@ class Terminal:
             
     def receive_reply(self):
         while self.connected and self.is_reader_alive:
+            #print('self.conected and self.is_reader_alive are both true')
             reply = self.arduino.readline().decode(self.encoding)
             #print(reply)
             
@@ -74,10 +87,12 @@ class Terminal:
 
             if reply[-8:] == "The End." : # receives the end signal from the Arduino chip. It means that the total amount of time has elapsed 
                # print('I also am the End!')
-                self.connected = False
-                self.is_reader_alive = False
-                print("Measurements are done. Press Enter to get your graph.") # until a better solution you will have to manually press enter to see your data plotted 
-
+               #self.send_message_exit()
+               self.connected = False
+               self.is_reader_alive = False
+               print("Measurements are done. Press Enter to get your graph.") # until a better solution you will have to manually press enter to see your data plotted 
+            
+            
             time.sleep(0.2)
             
 
@@ -92,5 +107,7 @@ class Terminal:
                 self.send_message()
                 time.sleep(0.3)
 
+           
+            
         except Exception as e:
             print("[X] Exception :", e)

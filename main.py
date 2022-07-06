@@ -1,6 +1,3 @@
-import serial
-import time
-import threading
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,6 +5,7 @@ import array as arr
 import math
 import os
 import os.path
+import threading
 
 
 from terminal import Terminal
@@ -51,9 +49,11 @@ if __name__ == "__main__":
    
     listen.start()
 
-    livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile)
+    livePloting(nameExp, write_to_file_path, number_of_lines_in_Tempfile, ardterm)
 
     listen.join()
+
+
 
 
     plotingAndSaving(nameExp, write_to_file_path)
